@@ -63,7 +63,7 @@ end = _ "return" ws rhs:val {
     return rhs[1];
 }
 
-assign = _ "let" ws lhs:name _ eq _ rhs:arg _ {
+assign = _ lhs:name _ eq _ rhs:arg _ {
     console.log('assign', lhs, rhs);
     store[lhs] = rhs;
 }
