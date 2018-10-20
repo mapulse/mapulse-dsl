@@ -1,2 +1,5 @@
 from data
-return ( reduce ( map data .hello ) + )
+let g = (map data .hello)
+let h = (reduce g +)
+return h
+

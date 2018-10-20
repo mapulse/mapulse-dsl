@@ -59,23 +59,23 @@ start = _ src _ (assign)* _ x:end _ {
 }
 
 end = _ "return" ws rhs:val {
-    console.log('rhs', rhs);
-    return rhs;
+    console.log('rhs', rhs[1]);
+    return rhs[1];
 }
 
-assign = _ "let" ws lhs:name _ eq _ rhs:val _ {
+assign = _ "let" ws lhs:name _ eq _ rhs:arg _ {
+    console.log('assign', lhs, rhs);
     store[lhs] = rhs;
 }
 
+val = _ (arg / fn) _ 
 
-val = _ op _ x:fn _ y:rec* _ cl _ {
+arg = _ op _ x:fn _ y:val* _ cl _ {
     y.unroll(1);
     console.log('fn', x);
-    console.log('val', y);
+    console.log('arg', y);
     return _eval(x, y)
 }
-
-rec = _ (val / fn) _
 
 fn = map 
     / reduce 
