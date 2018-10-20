@@ -1,2 +1,2 @@
 from data
-return ( reduce ( map (data) (.hello) ) (+) )
+return ( reduce ( map data .hello ) + )

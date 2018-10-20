@@ -6,13 +6,6 @@
             this[i] = this[i][x];
         }
     }
-    Array.prototype.map = function (callback) {
-        var clone = Object.assign([], this);
-        for (var i = 0; i < clone.length; i++) {
-            clone[i] = callback(clone[i]);
-        }
-        return clone;
-    }
     function _unnest (keys) {
         return function (target) {
             var y = Object.assign({}, target);
@@ -74,11 +67,15 @@ assign = _ "let" ws lhs:name _ eq _ rhs:val _ {
     store[lhs] = rhs;
 }
 
-val = _ op _ x:fn _ y:val* _ cl _ {
+
+val = _ op _ x:fn _ y:rec* _ cl _ {
+    y.unroll(1);
     console.log('fn', x);
     console.log('val', y);
     return _eval(x, y)
 }
+
+rec = _ (val / fn) _
 
 fn = map 
     / reduce 
@@ -104,9 +101,7 @@ fn = map
     }
     
     get = label:name {
-        return function () {
-            return store[label];
-        }
+        return store[label];
     }
 
 binaryoperator = add / multiply / subtract / divide
@@ -137,7 +132,7 @@ binaryoperator = add / multiply / subtract / divide
             
 key = _ "." _ name _ 
 
-name = label:[a-zA-Z0-9_]* {
+name = label:[a-zA-Z0-9_]+ {
     return label.join("");
 }
 
