@@ -38,6 +38,27 @@
                         : target[0] || null;
         }
     }
+    function _eval (x, y) {
+        if (x.length === 0) {
+            return x();
+        } else {
+            if (Array.isArray(y) &&
+                y.length > 0 &&
+                y.every(cv => cv !== undefined)) {
+                var z = x(y[0]);
+                if (y.length > 1) {
+                    for (var i = 1; i < y.length; i++) {
+                        z = z(y[i]);
+                    }
+                }
+                console.log('eval',z);
+                return z;
+            } else {
+                console.log('return fn', x);
+                return x;
+            }
+        }
+    }
 }
 
 start = _ src _ (assign)* _ x:end _ {
@@ -56,25 +77,7 @@ assign = _ "let" ws lhs:name _ eq _ rhs:val _ {
 val = _ op _ x:fn _ y:val* _ cl _ {
     console.log('fn', x);
     console.log('val', y);
-    if (x.length === 0) {
-        return x();
-    } else {
-        if (Array.isArray(y) &&
-            y.length > 0 &&
-            y.every(cv => cv !== undefined)) {
-            var z = x(y[0]);
-            if (y.length > 1) {
-                for (var i = 1; i < y.length; i++) {
-                    z = z(y[i]);
-                }
-            }
-            console.log('eval',z);
-            return z;
-        } else {
-            console.log('return fn', x);
-            return x;
-        }
-    }
+    return _eval(x, y)
 }
 
 fn = map 
@@ -83,11 +86,11 @@ fn = map
     / binaryoperator 
     / get
 
-    map = _ "map" _ {
+    map = _ "map" ws {
         return _map;
     }
     
-    reduce = _ "reduce" _ {
+    reduce = _ "reduce" ws {
         return _reduce;
     }
     
