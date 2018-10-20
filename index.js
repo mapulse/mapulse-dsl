@@ -1,7 +1,7 @@
 const fs = require('fs');
 const peg = require('pegjs');
 const grammar = fs.readFileSync('grammar.pegjs', 'utf8');
-const query = fs.readFileSync('query.maql', 'utf8');
+const query = fs.readFileSync('query.mapulse', 'utf8');
 const parser = peg.generate(grammar);
 const result = parser.parse(query);
 
