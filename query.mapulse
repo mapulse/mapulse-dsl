@@ -1,6 +1,5 @@
 from data
 g = (map data .hello)
 h = (reduce g +)
-h = 3
-return h
-
+i = (+ 3 2)
+return i

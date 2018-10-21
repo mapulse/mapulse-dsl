@@ -6,6 +6,9 @@
             this[i] = this[i][x];
         }
     }
+    function _isFunction(x) {
+        return Object.prototype.toString.call(x) == '[object Function]';
+    }
     function _unnest (keys) {
         return function (target) {
             var y = Object.assign({}, target);
@@ -41,13 +44,15 @@
                 var z = x(y[0]);
                 if (y.length > 1) {
                     for (var i = 1; i < y.length; i++) {
-                        z = z(y[i]);
+                        if (_isFunction(z)) {
+                            z = z(y[i]);
+                        }
                     }
                 }
-                console.log('eval',z);
+                console.log('eval', z);
                 return z;
             } else {
-                console.log('return fn', x);
+                console.log('no eval, returning fn', x);
                 return x;
             }
         }
@@ -59,21 +64,19 @@ start = _ src _ (assign)* _ x:end _ {
 }
 
 end = _ "return" ws rhs:val {
-    console.log('rhs', rhs[1]);
     return rhs[1];
 }
 
-assign = _ lhs:name _ eq _ rhs:arg _ {
-    console.log('assign', lhs, rhs);
-    store[lhs] = rhs;
+assign = _ lhs:name _ eq _ rhs:val _ {
+    store[lhs] = rhs[1];
 }
 
-val = _ (arg / fn) _ 
+val = _ (arg / fn ) _ 
 
 arg = _ op _ x:fn _ y:val* _ cl _ {
     y.unroll(1);
     console.log('fn', x);
-    console.log('arg', y);
+    console.log('val', y);
     return _eval(x, y)
 }
 
@@ -81,6 +84,7 @@ fn = map
     / reduce 
     / unnest 
     / binaryoperator 
+    / num
     / get
 
     map = _ "map" ws {
@@ -99,7 +103,7 @@ fn = map
     src = _ "from" ws label: name {
         store[label] = data;
     }
-    
+
     get = label:name {
         return store[label];
     }
@@ -132,7 +136,7 @@ binaryoperator = add / multiply / subtract / divide
             
 key = _ "." _ name _ 
 
-name = label:[a-zA-Z0-9_]+ {
+name = label:[a-zA-Z_]+ {
     return label.join("");
 }
 
@@ -146,3 +150,6 @@ op = _ "(" _
 
 cl = _ ")" _ 
 
+num = num:[0-9]+ {
+    return Number(num);
+}
