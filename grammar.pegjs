@@ -1,5 +1,5 @@
 {
-    var data = [{'hello': 1}, {'hello':2}];
+    var data = [{'hello': -100}, {'hello':-2}];
     var store = {};
     Array.prototype.unroll = function (x) {
         for (var i = 0; i < this.length; i++) {
@@ -34,6 +34,13 @@
                         : target[0] || null;
         }
     }
+    /*
+    Note when used with _reduce it will take the
+    first arg and simply round it by the second.
+    */
+    function _round (x, y) {
+        return Number(x).toFixed(y);
+    }
     function _eval (x, y) {
         if (x.length === 0) {
             return x();
@@ -43,10 +50,12 @@
                 y.every(cv => cv !== undefined)) {
                 var z = x(y[0]);
                 if (y.length > 1) {
-                    for (var i = 1; i < y.length; i++) {
-                        if (_isFunction(z)) {
-                            z = z(y[i]);
-                        }
+                    if (y.every(cv => !isNaN(cv))) {
+                        z = _reduce(y)(x);
+                    } else {
+                        y.slice(1).forEach(cv => {
+                            z = _isFunction(z)? z(cv): z;
+                        });
                     }
                 }
                 console.log('eval', z);
@@ -83,6 +92,7 @@ arg = _ op _ x:fn _ y:val* _ cl _ {
 fn = map 
     / reduce 
     / unnest 
+    / round
     / binaryoperator 
     / num
     / get
@@ -104,9 +114,14 @@ fn = map
         store[label] = data;
     }
 
+    round = _ "round" ws {
+        return _round;
+    }
+
     get = label:name {
         return store[label];
     }
+
 
 binaryoperator = add / multiply / subtract / divide
 
@@ -134,9 +149,13 @@ binaryoperator = add / multiply / subtract / divide
         }
     }
             
+num = n:[.0-9]+ {
+    return Number(n.join(""));
+}
+
 key = _ "." _ name _ 
 
-name = label:[a-zA-Z_]+ {
+name = label:[a-zA-Z_0-9]+ {
     return label.join("");
 }
 
@@ -150,6 +169,3 @@ op = _ "(" _
 
 cl = _ ")" _ 
 
-num = num:[0-9]+ {
-    return Number(num);
-}
