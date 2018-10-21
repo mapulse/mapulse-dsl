@@ -1,5 +1,0 @@
-from data
-let g = (map data .hello)
-let h = (reduce g +)
-return h
-

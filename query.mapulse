@@ -1,0 +1,6 @@
+from data
+h = (+ 13 2 1 1 2 35 1 )
+i = (- (+ (reduce (map data .hello) +) h) 99.14)
+j = (% i 100)
+k = (round j 2)
+return k
