@@ -1,5 +1,5 @@
 {
-    var data = [{'hello': 1}, {'hello':2}];
+    var data = [{'hello': -100}, {'hello':-2}];
     var store = {};
     Array.prototype.unroll = function (x) {
         for (var i = 0; i < this.length; i++) {
@@ -43,10 +43,12 @@
                 y.every(cv => cv !== undefined)) {
                 var z = x(y[0]);
                 if (y.length > 1) {
-                    for (var i = 1; i < y.length; i++) {
-                        if (_isFunction(z)) {
-                            z = z(y[i]);
-                        }
+                    if (y.every(cv => !isNaN(cv))) {
+                        z = _reduce(y)(x);
+                    } else {
+                        y.slice(1).forEach(cv => {
+                            z = _isFunction(z)? z(cv): z;
+                        });
                     }
                 }
                 console.log('eval', z);
@@ -136,7 +138,7 @@ binaryoperator = add / multiply / subtract / divide
             
 key = _ "." _ name _ 
 
-name = label:[a-zA-Z_]+ {
+name = label:[a-zA-Z_0-9]+ {
     return label.join("");
 }
 
@@ -150,6 +152,6 @@ op = _ "(" _
 
 cl = _ ")" _ 
 
-num = num:[0-9]+ {
-    return Number(num);
+num = n:[.0-9]+ {
+    return Number(n.join(""));
 }

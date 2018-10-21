@@ -1,5 +1,4 @@
 from data
-g = (map data .hello)
-h = (reduce g +)
-i = (+ 3 2)
+h = (+ 13 2 1 1 2 35 1 )
+i = (- (+ (reduce (map data .hello) +) h) 99.14)
 return i
