@@ -34,6 +34,13 @@
                         : target[0] || null;
         }
     }
+    /*
+    Note when used with _reduce it will take the
+    first arg and simply round it by the second.
+    */
+    function _round (x, y) {
+        return Number(x).toFixed(y);
+    }
     function _eval (x, y) {
         if (x.length === 0) {
             return x();
@@ -85,6 +92,7 @@ arg = _ op _ x:fn _ y:val* _ cl _ {
 fn = map 
     / reduce 
     / unnest 
+    / round
     / binaryoperator 
     / num
     / get
@@ -106,9 +114,14 @@ fn = map
         store[label] = data;
     }
 
+    round = _ "round" ws {
+        return _round;
+    }
+
     get = label:name {
         return store[label];
     }
+
 
 binaryoperator = add / multiply / subtract / divide
 
@@ -136,6 +149,10 @@ binaryoperator = add / multiply / subtract / divide
         }
     }
             
+num = n:[.0-9]+ {
+    return Number(n.join(""));
+}
+
 key = _ "." _ name _ 
 
 name = label:[a-zA-Z_0-9]+ {
@@ -152,6 +169,3 @@ op = _ "(" _
 
 cl = _ ")" _ 
 
-num = n:[.0-9]+ {
-    return Number(n.join(""));
-}
