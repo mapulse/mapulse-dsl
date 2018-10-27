@@ -8,6 +8,7 @@
  * grammar file, and we are able to use it.
 */
 
+require('pegjs');
 var parser = require('./grammar.js');
 var Mapulse = function (data, query) {
     this.data = data;
@@ -15,7 +16,7 @@ var Mapulse = function (data, query) {
 };
 
 Mapulse.prototype.call = function () {
-    parser.parse(
+    return parser.parse(
         this.query, 
         {
             data: this.data,
