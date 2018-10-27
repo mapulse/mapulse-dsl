@@ -49,6 +49,14 @@
                         : target[0] || null;
         }
     }
+    function _filter (target) {
+        return function (callback) {
+            return ( Array.isArray(target) 
+                && target.length > 1 ) ? 
+                    target.filter(callback) 
+                        : null;
+        }
+    }
     /*
     Note when used with _reduce it will take the
     first arg and simply round it by the second.
