@@ -1,15 +1,19 @@
 {
-  "name": "parser",
-  "version": "1.0.0",
-  "description": "",
+  "name": "mapulse-dsl",
+  "version": "0.1.0",,
+  "description": "Domain specific language for mapulse.io",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "make test"
   },
   "keywords": [],
-  "author": "",
+  "author": "philjung94",
   "license": "ISC",
   "dependencies": {
     "pegjs": "^0.10.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0"
   }
 }
