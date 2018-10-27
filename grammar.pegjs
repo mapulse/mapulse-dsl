@@ -1,5 +1,5 @@
 {
-    var data = [{'hello': -100}, {'hello':-2}];
+    var data = options.data;
     var store = {};
     Array.prototype.unroll = function (x) {
         for (var i = 0; i < this.length; i++) {
