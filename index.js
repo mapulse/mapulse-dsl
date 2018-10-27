@@ -1,15 +1,12 @@
+ /*
+ * Copyright [2018] [mapulse.io (Mapulse)]
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ */
 
-/*
- * Re: passing data to the parser .js
- * We just need to add to the options arg in
- * peg$parse function.
- * Then we just make sure to have included
- * let data = options.data at the top of 
- * grammar file, and we are able to use it.
-*/
-
-require('pegjs');
 var parser = require('./grammar.js');
+
 var Mapulse = function (data, query) {
     this.data = data;
     this.query = query;
