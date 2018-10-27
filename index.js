@@ -15,7 +15,7 @@
 
 var parser = require('./grammar.js');
 
-var Mapulse = function (data, query) {
+var Mapulse = function (data = null, query = null) {
     this.data = data;
     this.query = query;
 };
@@ -28,5 +28,10 @@ Mapulse.prototype.call = function () {
         }
     );
 };
+
+Mapulse.prototype.set = function (data, query) {
+    this.data = data;
+    this.query = query;
+}
 
 module.exports = Mapulse;
