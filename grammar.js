@@ -133,7 +133,7 @@ peg$SyntaxError.buildMessage = function(expected, found) {
   return "Expected " + describeExpected(expected) + " but " + describeFound(found) + " found.";
 };
 
-function peg$parse(input, options, _data) {
+function peg$parse(input, options) {
   options = options !== void 0 ? options : {};
 
   var peg$FAILED = {},
@@ -1277,7 +1277,7 @@ function peg$parse(input, options, _data) {
   }
 
 
-      var data = _data;
+      var data = options.data;
       var store = {};
       Array.prototype.unroll = function (x) {
           for (var i = 0; i < this.length; i++) {
