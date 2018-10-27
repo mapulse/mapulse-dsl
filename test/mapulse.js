@@ -1,5 +1,5 @@
 const fs = require('fs');
-const query = fs.readFileSync('query.mapulse','utf8');
+const query = fs.readFileSync('test/query.mapulse','utf8');
 const Mapulse = require('../index');
 const data = [{
     hello: 10,
