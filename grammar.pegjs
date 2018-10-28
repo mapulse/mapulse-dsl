@@ -114,7 +114,6 @@ arg = _ op _ x:fn _ y:val* _ cl _ {
 
 curry = _ op _ a:fn _ "$" _ b:fn _ cl _ {
     return function (x) {
-	console.log('curry x', x);
         return a(b(x));
     };
 }
