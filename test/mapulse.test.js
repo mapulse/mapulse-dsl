@@ -50,12 +50,21 @@ describe('----MapD Test Suite----', function () {
         });
         it('should get the element whose value is greater than 5', function () {
             m.set([
+                {label: 'warlock', example_0: -190},
+                {label: 'mage', example_0: 3},
+                {label: 'rogue', example_0: 4},
+                {label: 'masterchief', example_0: 19999},
+            ], 'from data\nreturn (.0.label (filter data (gt 5 $ .example_0)))');
+            assert.equal(m.call(), 'masterchief');
+        });
+        it('should get the index of the value that is greater than 5', function () {
+            m.set([
                 {example_0: -190},
                 {example_0: 3},
                 {example_0: 4},
                 {example_0: 19999},
-            ], 'from data\nreturn (.0 (filter data ((gt 5) $ .example_0)))');
-            assert.equal(m.call(), 19999);
+            ], 'from data\nreturn (findIndex (map data .example_0) gt 5)');
+            assert.equal(m.call(), 3);
         });
     });
     describe('using reduce to produce an acc', function () {

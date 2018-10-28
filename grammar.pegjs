@@ -57,6 +57,15 @@
                         : null;
         }
     }
+    function _findIndex (target) {
+        return function (callback) {
+            console.log('callback', callback);
+            return ( Array.isArray(target) 
+                && target.length > 1 ) ? 
+                    target.findIndex(callback) 
+                        : null;
+        }
+    }
     /*
     Note when used with _reduce it will take the
     first arg and simply round it by the second.
@@ -103,7 +112,7 @@ assign = _ lhs:name _ eq _ rhs:val _ {
     store[lhs] = rhs[1];
 }
 
-val = _ (arg / fn ) _ 
+val = _ (arg / curry / fn) _ 
 
 arg = _ op _ x:fn _ y:val* _ cl _ {
     y.unroll(1);
@@ -112,14 +121,21 @@ arg = _ op _ x:fn _ y:val* _ cl _ {
     return _eval(x, y)
 }
 
+curry = _ op _ a:fn _ "$" _ b:fn _ cl _ {
+    return function (x) {
+	console.log('curry x', x);
+        return a(b(x));
+    };
+}
+
 fn = arraymethods
+    / binaryoperator 
     / unnest 
     / round
-    / binaryoperator 
     / num
     / get
 
-arraymethods = map / reduce / filter / filtercallbacks
+arraymethods = map / reduce / filter / findIndex / filtercallbacks
 
     map = _ "map" ws {
         return _map;
@@ -131,6 +147,10 @@ arraymethods = map / reduce / filter / filtercallbacks
 
     filter = "filter" ws {
         return _filter;
+    }
+
+    findIndex = "findIndex" ws {
+        return _findIndex;
     }
 
         filtercallbacks = gt / lt / e
@@ -146,7 +166,6 @@ arraymethods = map / reduce / filter / filtercallbacks
             e = _ "eq" ws n:num _ {
                 return function (cv) {return Number(cv) == Number(n);}
             }
-
 
 binaryoperator = add / multiply / subtract / divide
 
