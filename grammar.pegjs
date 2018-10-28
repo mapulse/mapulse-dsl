@@ -112,7 +112,7 @@ assign = _ lhs:name _ eq _ rhs:val _ {
     store[lhs] = rhs[1];
 }
 
-val = _ (arg / fn / curry) _ 
+val = _ (arg / curry / fn) _ 
 
 arg = _ op _ x:fn _ y:val* _ cl _ {
     y.unroll(1);
@@ -121,16 +121,19 @@ arg = _ op _ x:fn _ y:val* _ cl _ {
     return _eval(x, y)
 }
 
+curry = _ op _ a:fn _ "$" _ b:fn _ cl _ {
+    return function (x) {
+	console.log('curry x', x);
+        return a(b(x));
+    };
+}
+
 fn = arraymethods
     / binaryoperator 
     / unnest 
     / round
     / num
     / get
-
-curry = _ a:fn _ "$" _ b:fn _ {
-    return b(a);
-}
 
 arraymethods = map / reduce / filter / findIndex / filtercallbacks
 
@@ -153,7 +156,6 @@ arraymethods = map / reduce / filter / findIndex / filtercallbacks
         filtercallbacks = gt / lt / e
         
             gt = _ "gt" ws n:num _ {
-                console.log('n', n);
                 return function (cv) {return Number(cv) > Number(n);}
             }
             
