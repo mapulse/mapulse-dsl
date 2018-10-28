@@ -48,7 +48,7 @@ describe('----MapD Test Suite----', function () {
             ], 'from data\nreturn (.0 (filter (map data .example_0) (gt 5)))');
             assert.equal(m.call(), 19999);
         });
-        it('should get the element whose value is greater than 5', function () {
+        it('should get the label of the element whose value is greater than 5', function () {
             m.set([
                 {label: 'warlock', example_0: -190},
                 {label: 'mage', example_0: 3},
@@ -56,15 +56,6 @@ describe('----MapD Test Suite----', function () {
                 {label: 'masterchief', example_0: 19999},
             ], 'from data\nreturn (.0.label (filter data (gt 5 $ .example_0)))');
             assert.equal(m.call(), 'masterchief');
-        });
-        it('should get the index of the value that is greater than 5', function () {
-            m.set([
-                {example_0: -190},
-                {example_0: 3},
-                {example_0: 4},
-                {example_0: 19999},
-            ], 'from data\nreturn (findIndex (map data .example_0) gt 5)');
-            assert.equal(m.call(), 3);
         });
     });
     describe('using reduce to produce an acc', function () {
@@ -75,6 +66,23 @@ describe('----MapD Test Suite----', function () {
                 {example_0: 20},
             ], 'from data\nreturn (reduce (map data .example_0) +)');
             assert.equal(m.call(), 45);
+        });
+        it('should loop through a filtered array, accumulate their values', function () {
+            m.set([
+                {example_0: 10},
+                {example_0: 15},
+                {example_0: 20},
+                {example_0: 10},
+                {example_0: 15},
+                {example_0: 20},
+                {example_0: 10},
+                {example_0: 15},
+                {example_0: 20},
+                {example_0: 10},
+                {example_0: 10},
+                {example_0: 20},
+            ], 'from data\nreturn (reduce (map (filter data (eq 10 $ .example_0)) .example_0) +)');
+            assert.equal(m.call(), 50);
         });
     });
 });

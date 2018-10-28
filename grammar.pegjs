@@ -57,15 +57,6 @@
                         : null;
         }
     }
-    function _findIndex (target) {
-        return function (callback) {
-            console.log('callback', callback);
-            return ( Array.isArray(target) 
-                && target.length > 1 ) ? 
-                    target.findIndex(callback) 
-                        : null;
-        }
-    }
     /*
     Note when used with _reduce it will take the
     first arg and simply round it by the second.
@@ -123,7 +114,6 @@ arg = _ op _ x:fn _ y:val* _ cl _ {
 
 curry = _ op _ a:fn _ "$" _ b:fn _ cl _ {
     return function (x) {
-	console.log('curry x', x);
         return a(b(x));
     };
 }
@@ -135,7 +125,7 @@ fn = arraymethods
     / num
     / get
 
-arraymethods = map / reduce / filter / findIndex / filtercallbacks
+arraymethods = map / reduce / filter / filtercallbacks
 
     map = _ "map" ws {
         return _map;
@@ -147,10 +137,6 @@ arraymethods = map / reduce / filter / findIndex / filtercallbacks
 
     filter = "filter" ws {
         return _filter;
-    }
-
-    findIndex = "findIndex" ws {
-        return _findIndex;
     }
 
         filtercallbacks = gt / lt / e
