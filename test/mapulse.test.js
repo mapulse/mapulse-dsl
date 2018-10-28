@@ -20,7 +20,7 @@ describe('----MapD Test Suite----', function () {
             }, 'from data\nreturn (.example_1.example_1.example_1 data)');
             assert.equal(m.call(), 'some nested value');
         });
-        it('should get the 4th value = 10305', function () {
+        it('should get the 4th value in the array = 10305', function () {
             m.set([
                 {example_1: 15},
                 {example_1: 25},
@@ -36,6 +36,17 @@ describe('----MapD Test Suite----', function () {
                 example_0: 15
             }, 'from data\nreturn (- (.example_0 data) 10)');
             assert.equal(m.call(), 5);
+        });
+    });
+    describe('filter through the array dataset', function () {
+        it('should get the value that is greater than 5', function () {
+            m.set([
+                {example_0: -190},
+                {example_0: 3},
+                {example_0: 4},
+                {example_0: 19999},
+            ], 'from data\nreturn (.0 (filter (map data .example_0) gt 5))');
+            assert.equal(m.call(), 19999);
         });
     });
     describe('using reduce to produce an acc', function () {

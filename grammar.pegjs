@@ -112,13 +112,14 @@ arg = _ op _ x:fn _ y:val* _ cl _ {
     return _eval(x, y)
 }
 
-fn = map 
-    / reduce 
+fn = arraymethods
     / unnest 
     / round
     / binaryoperator 
     / num
     / get
+
+arraymethods = map / reduce / filter / filtercallbacks
 
     map = _ "map" ws {
         return _map;
@@ -127,23 +128,24 @@ fn = map
     reduce = _ "reduce" ws {
         return _reduce;
     }
-    
-    unnest = _ keys:key+ _ {
-        keys.unroll(3);
-        return _unnest(keys);
-    }
-    
-    src = _ "from" ws label: name {
-        store[label] = data;
+
+    filter = "filter" ws {
+        return _filter;
     }
 
-    round = _ "round" ws {
-        return _round;
-    }
-
-    get = label:name {
-        return store[label];
-    }
+        filtercallbacks = gt / lt / e
+        
+            gt = _ "gt" ws n:num _ {
+                return function (cv) {return Number(cv) > Number(n);}
+            }
+            
+            lt = _ "lt" ws n:num _ {
+                return function (cv) {return Number(cv) < Number(n);}
+            }
+        
+            e = _ "eq" ws n:num _ {
+                return function (cv) {return Number(cv) == Number(n);}
+            }
 
 
 binaryoperator = add / multiply / subtract / divide
@@ -171,7 +173,20 @@ binaryoperator = add / multiply / subtract / divide
             return a / b;
         }
     }
-            
+
+unnest = _ keys:key+ _ {
+    keys.unroll(3);
+    return _unnest(keys);
+}
+
+src = _ "from" ws label: name {
+    store[label] = data;
+}
+
+round = _ "round" ws {
+    return _round;
+}
+
 num = n:[.0-9]+ {
     return Number(n.join(""));
 }
@@ -182,6 +197,10 @@ name = label:[a-zA-Z_0-9]+ {
     return label.join("");
 }
 
+get = label:name {
+    return store[label];
+}
+            
 _ = [ \t\n\r]*
 
 ws = [ \t\n\r]+
