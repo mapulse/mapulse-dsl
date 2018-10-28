@@ -54,7 +54,7 @@ describe('----MapD Test Suite----', function () {
                 {example_0: 3},
                 {example_0: 4},
                 {example_0: 19999},
-            ], 'from data\nreturn (.0 (filter data ((gt 5) $ .example_0)))');
+            ], 'from data\nreturn (.0 (filter data (gt 5 $ .example_0)))');
             assert.equal(m.call(), 19999);
         });
     });

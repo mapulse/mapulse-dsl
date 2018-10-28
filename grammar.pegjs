@@ -103,7 +103,7 @@ assign = _ lhs:name _ eq _ rhs:val _ {
     store[lhs] = rhs[1];
 }
 
-val = _ (arg / fn ) _ 
+val = _ (arg / fn / curry) _ 
 
 arg = _ op _ x:fn _ y:val* _ cl _ {
     y.unroll(1);
@@ -113,11 +113,15 @@ arg = _ op _ x:fn _ y:val* _ cl _ {
 }
 
 fn = arraymethods
+    / binaryoperator 
     / unnest 
     / round
-    / binaryoperator 
     / num
     / get
+
+curry = _ a:fn _ "$" _ b:fn _ {
+    return b(a);
+}
 
 arraymethods = map / reduce / filter / filtercallbacks
 
@@ -146,7 +150,6 @@ arraymethods = map / reduce / filter / filtercallbacks
             e = _ "eq" ws n:num _ {
                 return function (cv) {return Number(cv) == Number(n);}
             }
-
 
 binaryoperator = add / multiply / subtract / divide
 
