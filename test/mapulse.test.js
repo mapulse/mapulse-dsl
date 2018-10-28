@@ -39,13 +39,22 @@ describe('----MapD Test Suite----', function () {
         });
     });
     describe('filter through the array dataset', function () {
-        it('should get the value that is greater than 5', function () {
+        it('should get the first value that is greater than 5', function () {
             m.set([
                 {example_0: -190},
                 {example_0: 3},
                 {example_0: 4},
                 {example_0: 19999},
-            ], 'from data\nreturn (.0 (filter (map data .example_0) gt 5))');
+            ], 'from data\nreturn (.0 (filter (map data .example_0) (gt 5)))');
+            assert.equal(m.call(), 19999);
+        });
+        it('should get the element whose value is greater than 5', function () {
+            m.set([
+                {example_0: -190},
+                {example_0: 3},
+                {example_0: 4},
+                {example_0: 19999},
+            ], 'from data\nreturn (.0 (filter data ((gt 5) $ .example_0)))');
             assert.equal(m.call(), 19999);
         });
     });
