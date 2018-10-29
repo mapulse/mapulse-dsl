@@ -154,8 +154,8 @@ function peg$parse(input, options) {
       },
       peg$c5 = function(x, y) {
           y.unroll(1);
-          console.log('fn', x);
-          console.log('val', y);
+          if (isLogged) console.log('fn', x);
+          if (isLogged) console.log('val', y);
           return _eval(x, y)
       },
       peg$c6 = "$",
@@ -1589,6 +1589,7 @@ function peg$parse(input, options) {
 
 
       var data = options.data;
+      var isLogged = options.isLogged;
       var store = {};
       Array.prototype.unroll = function (x) {
           for (var i = 0; i < this.length; i++) {
@@ -1655,10 +1656,10 @@ function peg$parse(input, options) {
                           });
                       }
                   }
-                  console.log('eval', z);
+                  if (isLogged) console.log('eval', z);
                   return z;
               } else {
-                  console.log('no eval, returning fn', x);
+                  if (isLogged) console.log('no eval, returning fn', x);
                   return x;
               }
           }

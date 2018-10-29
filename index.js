@@ -20,11 +20,12 @@ var Mapulse = function (data = null, query = null) {
     this.query = query;
 };
 
-Mapulse.prototype.call = function () {
+Mapulse.prototype.call = function (isLogged = false) {
     return parser.parse(
         this.query, 
         {
             data: this.data,
+            isLogged,
         }
     );
 };
