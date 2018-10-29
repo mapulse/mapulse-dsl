@@ -15,6 +15,7 @@
 
 {
     var data = options.data;
+    var isLogged = options.isLogged;
     var store = {};
     Array.prototype.unroll = function (x) {
         for (var i = 0; i < this.length; i++) {
@@ -81,10 +82,10 @@
                         });
                     }
                 }
-                console.log('eval', z);
+                if (isLogged) console.log('eval', z);
                 return z;
             } else {
-                console.log('no eval, returning fn', x);
+                if (isLogged) console.log('no eval, returning fn', x);
                 return x;
             }
         }
@@ -107,8 +108,8 @@ val = _ (arg / curry / fn) _
 
 arg = _ op _ x:fn _ y:val* _ cl _ {
     y.unroll(1);
-    console.log('fn', x);
-    console.log('val', y);
+    if (isLogged) console.log('fn', x);
+    if (isLogged) console.log('val', y);
     return _eval(x, y)
 }
 
