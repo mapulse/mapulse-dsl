@@ -1,6 +1,6 @@
 {
   "name": "mapulse-dsl",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Domain specific language for mapulse.io",
   "main": "index.js",
   "scripts": {
